@@ -1,10 +1,20 @@
 mod github;
 
-use tokio;
 use crate::github::activity;
+use tokio;
 
 #[tokio::main]
-async fn main() {
-    activity::get_activity("example_user").await;
-    println!("Hello, world!");
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    // Define a date range for the last 30 days
+    let end_date = chrono::Utc::now().naive_utc().date();
+    let start_date = end_date - chrono::Duration::days(360);
+
+    let result = activity::get_activity("pfcoperez", (start_date, end_date)).await?;
+
+    let result_as_json = serde_json::to_string_pretty(&result)?;
+    println!("{}", result_as_json);
+
+    println!("Successfully fetched activity for user");
+
+    Ok(())
 }
