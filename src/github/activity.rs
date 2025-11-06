@@ -45,6 +45,7 @@ fn get_year_week(date: NaiveDate) -> YearWeek {
 pub async fn get_activity(
     user: UserName<'_>,
     date_range: DateRange,
+    maybe_token: Option<String>,
 ) -> Result<Activity, Box<dyn std::error::Error>> {
     let number_of_weeks = ((date_range.1 - date_range.0).num_days() as f32 / 7.0).ceil() as usize;
 
@@ -61,12 +62,16 @@ pub async fn get_activity(
     // GitHub API endpoint for user events
     let url = format!("https://api.github.com/users/{}/events", user);
 
+    let query = client.get(&url).header("User-Agent", "gh-trophy");
+
+    let query = if let Some(token) = maybe_token {
+        query.bearer_auth(token)
+    } else {
+        query
+    };
+
     // Make the request with required User-Agent header
-    let response = client
-        .get(&url)
-        .header("User-Agent", "gh-trophy")
-        .send()
-        .await?;
+    let response = query.send().await?;
 
     let events: Vec<Event> = response.json().await?;
 
