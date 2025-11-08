@@ -1,6 +1,9 @@
 mod github;
+mod openscad;
 
 use crate::github::activity;
+use crate::openscad::generators::generate_matrix_source;
+
 use tokio;
 
 #[tokio::main]
@@ -13,8 +16,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let result = activity::get_activity("pfcoperez", (start_date, end_date), maybe_token).await?;
 
-    let result_as_json = serde_json::to_string_pretty(&result)?;
-    println!("{}", result_as_json);
+    let result_as_simple_matrix = result.as_matrix();
+    let result_as_scad_data =
+        generate_matrix_source("rawActivity".to_string(), result_as_simple_matrix);
+    println!("{}", result_as_scad_data);
 
     println!("Successfully fetched activity for user");
 
