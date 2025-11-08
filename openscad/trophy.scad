@@ -8,7 +8,7 @@ baseW = 40;
 
 activityBase = 2; 
 activityL = 3;
-activityHfactor = activityL;
+activityHfactor = activityL*5;
 activityPadding = 10;
 
 module base() {
@@ -22,7 +22,7 @@ module activity() {
     for (j = [0:len(rawActivity)-1]) {
         week = rawActivity[j];
         for (i = [0:len(week)-1]) {
-            h = activityBase + week[i]*activityHfactor;
+            h = activityBase + log(week[i])*activityHfactor;
             translate([j*activityL, (len(week)-i)*activityL, baseH]) {
                 cube([activityL, activityL, h]);
             }
