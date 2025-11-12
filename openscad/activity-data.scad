@@ -1,5 +1,5 @@
 // To be used in other OpenScad source file with
-// include <rawActivity.scad>
+// include <activity-data.scad>
 rawActivity = [
     [0, 0, 0, 0, 0, 0, 0],
     [0, 15, 3, 3, 1, 0, 0],
@@ -45,8 +45,8 @@ rawActivity = [
     [0, 5, 2, 1, 0, 0, 2],
     [4, 2, 4, 4, 2, 0, 1],
     [1, 5, 4, 2, 3, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 2, 0, 1, 0, 1],
+    [0, 0, 2, 1, 0, 7, 3],
+    [0, 0, 0, 0, 0, 0, 1],
     [0, 3, 4, 5, 2, 0, 0],
     [1, 6, 3, 1, 3, 0, 0],
     [6, 2, 2, 1, 0, 0, 0],
@@ -54,3 +54,7 @@ rawActivity = [
     [2, 1, 5, 5, 0, 0, 0],
     [7, 3, 0, 0, 0, 0, 0],
 ];
+
+
+ghHandleTxt = "pfcoperez";
+spanTxt = "2024/11 - 2025/11";

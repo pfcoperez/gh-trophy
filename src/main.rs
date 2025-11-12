@@ -1,27 +1,25 @@
-mod github;
-mod openscad;
-
-use crate::github::activity;
-use crate::openscad::generators::generate_matrix_source;
+use gh_trophy::generators::generate_openscad;
 
 use tokio;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let maybe_token = std::env::var("GITHUB_TOKEN").ok();
+    let maybe_user_handle = std::env::args().nth(1);
 
-    // Define a date range for the last 30 days
     let end_date = chrono::Utc::now().naive_utc().date();
     let start_date = end_date - chrono::Duration::days(360);
 
-    let result = activity::get_activity("pfcoperez", (start_date, end_date), maybe_token).await?;
+    if let Some(user_handle) = maybe_user_handle {
+        let maybe_token = std::env::var("GITHUB_TOKEN").ok();
 
-    let result_as_simple_matrix = result.as_matrix();
-    let result_as_scad_data =
-        generate_matrix_source("rawActivity".to_string(), result_as_simple_matrix);
-    println!("{}", result_as_scad_data);
+        let result_as_scad_data =
+            generate_openscad(user_handle, start_date, end_date, maybe_token).await?;
 
-    println!("Successfully fetched activity for user");
-
-    Ok(())
+        println!("{}", result_as_scad_data);
+        return Ok(());
+    } else {
+        let error_msg = "Please provide a GitHub user handle as the first argument";
+        eprintln!("{}", error_msg);
+        return Err(std::io::Error::new(std::io::ErrorKind::InvalidInput, error_msg).into());
+    }
 }
