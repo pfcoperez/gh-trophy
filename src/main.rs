@@ -2,12 +2,22 @@ use gh_trophy::generators::generate_openscad;
 
 use tokio;
 
+/// CLI tool to download user activity data from GitHub
+/// and represent it as OpenSCAD source files that can be
+/// included in 3D models represented in this language.
+/// Expects one parameter with the GitHub user profile handle.
+/// It will obtain activity data over the last year to the date
+/// (From today-365 days to today).
+/// If the `GITHUB_TOKEN` environment variable is present, it will
+/// use it an application token to authenticate with GitHub API,
+/// this makes it possible to include private repositories activity
+/// on the response.
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let maybe_user_handle = std::env::args().nth(1);
 
     let end_date = chrono::Utc::now().naive_utc().date();
-    let start_date = end_date - chrono::Duration::days(360);
+    let start_date = end_date - chrono::Duration::days(365);
 
     if let Some(user_handle) = maybe_user_handle {
         let maybe_token = std::env::var("GITHUB_TOKEN").ok();

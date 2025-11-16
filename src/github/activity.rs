@@ -2,6 +2,9 @@ use chrono::{Datelike, NaiveDate, Weekday};
 use serde::{Deserialize, Serialize, Serializer};
 use std::collections::HashMap;
 
+/// Module to download daily activity from GitHub user
+/// profles in a given date range.
+
 type UserName<'a> = &'a str;
 
 type DateRange = (NaiveDate, NaiveDate);
@@ -21,9 +24,15 @@ impl Serialize for YearWeek {
     }
 }
 
+/// Data structure representing the GitHub user activity
 #[derive(Serialize, Debug)]
 pub struct Activity {
+    /// Date range of the represented activity period
     date_range: DateRange,
+    /// Contributions in the activity date range, it is a map from 
+    /// year to weeks.
+    /// Weeks are represented as a map from the day of the way (e.g: 0 -> Monday)
+    /// to the number of contributions on that day.
     contributions: HashMap<YearWeek, HashMap<Weekday, u32>>,
 }
 
@@ -32,6 +41,9 @@ impl Activity {
         ((self.date_range.1 - self.date_range.0).num_days() as f32 / 7.0).ceil() as usize
     }
 
+    /// Obtain a simplified representation of the activity data.
+    /// This is a 2D matrix where rows are weeks and columns days of 
+    /// the week with Monday at index 0.
     pub fn as_matrix(&self) -> Vec<Vec<u32>> {
         let mut matrix: Vec<Vec<u32>> = vec![vec![0; 7]; self.number_of_weeks()];
         for date in self.date_range.0.iter_weeks().take(self.number_of_weeks()) {
@@ -112,6 +124,11 @@ fn get_year_week(date: NaiveDate) -> YearWeek {
     }
 }
 
+/// Function using GitHub GraphQL API to download target user
+/// activity on the specified date range.
+/// if `maybe_token`is not `None`, it will be used as application
+/// authentication token. This is required to obtain private repositories
+/// contributions.
 pub async fn get_activity(
     user: UserName<'_>,
     date_range: DateRange,
