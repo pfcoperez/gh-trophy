@@ -2,17 +2,14 @@ use chrono::{Datelike, NaiveDate, Weekday};
 use serde::{Deserialize, Serialize, Serializer};
 use std::collections::HashMap;
 
-/// Module to download daily activity from GitHub user
-/// profles in a given date range.
-
 type UserName<'a> = &'a str;
 
 type DateRange = (NaiveDate, NaiveDate);
 
 #[derive(Debug, Hash, Eq, PartialEq)]
-struct YearWeek {
-    year: usize,
-    week: usize,
+pub struct YearWeek {
+    pub year: usize,
+    pub week: usize,
 }
 
 impl Serialize for YearWeek {
@@ -28,12 +25,12 @@ impl Serialize for YearWeek {
 #[derive(Serialize, Debug)]
 pub struct Activity {
     /// Date range of the represented activity period
-    date_range: DateRange,
+    pub date_range: DateRange,
     /// Contributions in the activity date range, it is a map from 
     /// year to weeks.
     /// Weeks are represented as a map from the day of the way (e.g: 0 -> Monday)
     /// to the number of contributions on that day.
-    contributions: HashMap<YearWeek, HashMap<Weekday, u32>>,
+    pub contributions: HashMap<YearWeek, HashMap<Weekday, u32>>,
 }
 
 impl Activity {
@@ -98,6 +95,7 @@ struct ContributionsCollection {
 
 #[derive(Deserialize, Debug)]
 struct ContributionCalendar {
+    #[allow(dead_code)]
     #[serde(rename = "totalContributions")]
     total_contributions: u32,
     weeks: Vec<Week>,
