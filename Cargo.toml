@@ -5,6 +5,7 @@ edition = "2024"
 license-file = "LICENSE"
 keywords = ["GitHub", "OpenSCAD"]
 homepage = "https://github.com/pfcoperez/gh-trophy"
+description = "CLI tool and associated libraries to fetch GH users activity and generate 3D models from this data"
 
 [dependencies]
 reqwest = { version = "0.12.24", features = ["json"] }
