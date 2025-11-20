@@ -23,7 +23,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         let maybe_token = std::env::var("GITHUB_TOKEN").ok();
 
         let result_as_scad_data =
-            generate_openscad(user_handle, start_date, end_date, maybe_token).await?;
+            generate_openscad(user_handle, start_date, end_date, maybe_token, None).await?;
 
         println!("{}", result_as_scad_data);
         return Ok(());

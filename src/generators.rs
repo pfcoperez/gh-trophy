@@ -8,6 +8,7 @@ pub async fn generate_openscad(
     start_date: NaiveDate,
     end_date: NaiveDate,
     maybe_token: Option<String>,
+    maybe_static_code: Option<String>,
 ) -> Result<String, Box<dyn std::error::Error>> {
     let result = activity::get_activity(&user_handle, (start_date, end_date), maybe_token).await?;
 
@@ -22,6 +23,7 @@ pub async fn generate_openscad(
             end_date.month()
         ),
         result_as_simple_matrix,
+        maybe_static_code,
     );
 
     Ok(result_as_scad_data)
