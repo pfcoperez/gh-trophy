@@ -26,7 +26,7 @@ impl Serialize for YearWeek {
 pub struct Activity {
     /// Date range of the represented activity period
     pub date_range: DateRange,
-    /// Contributions in the activity date range, it is a map from 
+    /// Contributions in the activity date range, it is a map from
     /// year to weeks.
     /// Weeks are represented as a map from the day of the way (e.g: 0 -> Monday)
     /// to the number of contributions on that day.
@@ -39,7 +39,7 @@ impl Activity {
     }
 
     /// Obtain a simplified representation of the activity data.
-    /// This is a 2D matrix where rows are weeks and columns days of 
+    /// This is a 2D matrix where rows are weeks and columns days of
     /// the week with Monday at index 0.
     pub fn as_matrix(&self) -> Vec<Vec<u32>> {
         let mut matrix: Vec<Vec<u32>> = vec![vec![0; 7]; self.number_of_weeks()];

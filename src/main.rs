@@ -1,4 +1,5 @@
 use gh_trophy::generators::generate_openscad;
+use gh_trophy::openscad::resources::trophy_without_data;
 
 use tokio;
 
@@ -22,8 +23,14 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if let Some(user_handle) = maybe_user_handle {
         let maybe_token = std::env::var("GITHUB_TOKEN").ok();
 
-        let result_as_scad_data =
-            generate_openscad(user_handle, start_date, end_date, maybe_token, None).await?;
+        let result_as_scad_data = generate_openscad(
+            user_handle,
+            start_date,
+            end_date,
+            maybe_token,
+            Some(trophy_without_data()),
+        )
+        .await?;
 
         println!("{}", result_as_scad_data);
         return Ok(());
